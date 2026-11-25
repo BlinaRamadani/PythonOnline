@@ -40,13 +40,29 @@ color_discrete_sequence = px.colors.sequential.Plasma
 
 st.plotly_chart(fig)
 
+st.subheader("filter Data by Genre")
+genre_filter = st.selectbox("Select Genre", books_df['Genre'].unique())
+filtered_df = books_df[books_df['Genre'] == genre_filter]
+st.write(filtered_df)
+
 st.subheader("Number of Fiction vs Non-Fiction Books over the Years")
 size= books_df.groupby(['Year', 'Genre']).size().reset_index(name='Counts')
 fig = px.bar(size, x='Year', y='Counts', color='Genre', title='Fiction vs Non-Fiction',
 color_discrete_sequence = px.colors.sequential.Plasma, barmode='group')
 st.plotly_chart(fig)
 
+st.subheader("Top 15 Authors by Counts of Book Published (2009-2022)")
+top_authors = filtered_books_df['Author'].value_counts().head(15).reset_index()
+top_authors.colums=['Author','Count']
+fig = px.bar(top_authors, x='Count', y='Author', orientation='h',
+             title='Top 15 Authors by Counts of Book Published',
+             labels={'Count':'Number of Books', 'Author':'Author'},
+             color ='Count', color_continuous_scale=px.colors.sequential.Plasma)
+st.plotly_chart(fig)
+
+
 st.subheader("Filter Data by Genre")
 genre_filter = st.selectbox("Select Genre", books_df['Genre'].unique())
 filtered_df = books_df[books_df['Genre']== genre_filter]
 st.write(filtered_df)
+
